@@ -6,13 +6,13 @@
   <title>Alston Chen — Projects</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0c0a18;--surface:#161230;--surface2:#201842;--border:rgba(210,195,240,0.1);--text:#e2dfd8;--text-muted:#a99ec4;--accent:#c4b0e0;--accent2:#ddd2f0;--accent-glow:rgba(196,176,224,0.18);--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;}
+    :root{--bg:#f8f6fc;--surface:#efeaf8;--surface2:#e4ddf2;--border:rgba(63,31,105,0.1);--text:#1a1030;--text-muted:#6b5a8a;--accent:#3f1f69;--accent2:#5d3c85;--accent-glow:rgba(63,31,105,0.08);--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;}
     *{margin:0;padding:0;box-sizing:border-box;}
     html{scroll-behavior:smooth;}
     body{font-family:var(--body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
-    body::after{content:'';position:fixed;inset:0;z-index:99990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:0.5;}
+    body::after{content:'';position:fixed;inset:0;z-index:99990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:0.15;}
 
-    nav{position:fixed;top:0;width:100%;z-index:1000;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(12,10,24,0.7);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border);transition:padding 0.4s;}
+    nav{position:fixed;top:0;width:100%;z-index:1000;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(248,246,252,0.85);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border);transition:padding 0.4s;}
     nav.scrolled{padding:0.8rem 3rem;}
     .logo{font-family:var(--heading);font-size:1.8rem;font-weight:700;color:var(--accent);text-decoration:none;}
     nav ul{list-style:none;display:flex;gap:2.5rem;}
@@ -31,7 +31,7 @@
     .projects-grid{max-width:1100px;margin:0 auto;padding:3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;}
     .card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:2rem;transition:border-color 0.4s,transform 0.4s cubic-bezier(0.25,0.8,0.25,1),box-shadow 0.4s;position:relative;overflow:hidden;}
     .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.5s cubic-bezier(0.25,0.8,0.25,1);}
-    .card:hover{border-color:rgba(196,176,224,0.3);transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,0.4);}
+    .card:hover{border-color:rgba(63,31,105,0.12);transform:translateY(-6px);box-shadow:0 16px 48px rgba(63,31,105,0.08);}
     .card:hover::before{transform:scaleX(1);}
     .card .tag{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:0.8rem;}
     .card h3{font-family:var(--heading);font-size:1.5rem;margin-bottom:0.6rem;}
@@ -53,7 +53,7 @@
     footer a{color:var(--accent);text-decoration:none;}
 
     .hamburger{display:none;background:none;border:none;cursor:pointer;padding:0.5rem;}
-    .hamburger span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;}
+    .hamburger span{display:block;width:22px;height:2px;background:#1a1030;margin:5px 0;}
     @media(max-width:768px){nav{padding:1rem 1.5rem;}nav ul{display:none;}.hamburger{display:block;}.projects-grid,.coursework{padding:2rem 1.5rem;}.page-header{padding:6rem 1.5rem 2rem;}}
   </style>
 </head>
@@ -145,7 +145,7 @@
   <footer><p>Alston Chen · <a href="mailto:achen26@amherst.edu">achen26@amherst.edu</a></p></footer>
 
   <script>
-    const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+    const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');else e.target.classList.remove('vis');});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
     window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>80);});
   </script>

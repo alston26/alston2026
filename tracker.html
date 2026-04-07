@@ -6,10 +6,10 @@
   <title>Habit Tracker — Alston Chen</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Outfit:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0c0a18;--surface:#161230;--surface2:#201842;--border:rgba(210,195,240,0.1);--text:#e2dfd8;--text-muted:#a99ec4;--accent:#c4b0e0;--accent2:#ddd2f0;--accent-glow:rgba(196,176,224,0.18);--green:#4aba6a;--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;}
+    :root{--bg:#f8f6fc;--surface:#efeaf8;--surface2:#e4ddf2;--border:rgba(63,31,105,0.1);--text:#1a1030;--text-muted:#6b5a8a;--accent:#3f1f69;--accent2:#5d3c85;--accent-glow:rgba(63,31,105,0.08);--green:#16a34a;--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;}
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
-    body::after{content:'';position:fixed;inset:0;z-index:99990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:0.5;}
+    body::after{content:'';position:fixed;inset:0;z-index:99990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:0.15;}
     nav{width:100%;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);}
     .logo{font-family:var(--heading);font-size:1.8rem;font-weight:700;color:var(--accent);text-decoration:none;}
     nav a.back{color:var(--text-muted);text-decoration:none;font-size:0.8rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.3s;}
@@ -23,7 +23,7 @@
     .add-habit input{flex:1;padding:0.7rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:50px;color:var(--text);font-family:var(--body);font-size:0.85rem;outline:none;transition:border-color 0.3s;}
     .add-habit input:focus{border-color:var(--accent);}
     .add-habit input::placeholder{color:var(--text-muted);}
-    .add-habit button{padding:0.7rem 1.5rem;background:var(--accent);color:#0a0a0a;border:none;border-radius:50px;font-family:var(--body);font-size:0.82rem;font-weight:600;cursor:pointer;transition:transform 0.3s,box-shadow 0.3s;white-space:nowrap;}
+    .add-habit button{padding:0.7rem 1.5rem;background:var(--accent);color:#fff;border:none;border-radius:50px;font-family:var(--body);font-size:0.82rem;font-weight:600;cursor:pointer;transition:transform 0.3s,box-shadow 0.3s;white-space:nowrap;}
     .add-habit button:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--accent-glow);}
 
     .week-header{display:grid;grid-template-columns:1fr repeat(7,44px) 50px;gap:4px;width:100%;padding:0 0.5rem;font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;text-align:center;opacity:0;animation:fu .6s .35s ease forwards;}
@@ -42,7 +42,7 @@
     .day-cell:hover{border-color:var(--accent);transform:scale(1.1);}
     .day-cell.done{background:var(--accent);border-color:var(--accent);transform:scale(1);}
     .day-cell.done:hover{opacity:0.8;}
-    .day-cell.today{border-color:var(--accent2);box-shadow:0 0 8px rgba(210,195,240,0.25);}
+    .day-cell.today{border-color:var(--accent2);box-shadow:0 0 8px rgba(63,31,105,0.25);}
 
     .streak{font-family:var(--mono);font-size:0.75rem;color:var(--accent);text-align:center;}
 
