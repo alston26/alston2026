@@ -52,7 +52,7 @@
     function placeFood(){do{food={x:Math.floor(Math.random()*CELLS),y:Math.floor(Math.random()*CELLS)};}while(snake.some(s=>s.x===food.x&&s.y===food.y));}
     function draw(){
       ctx.fillStyle='#111318';ctx.fillRect(0,0,canvas.width,canvas.height);
-      ctx.strokeStyle='rgba(255,255,255,0.02)';
+      ctx.strokeStyle='rgba(255,255,255,0.08)';
       for(let i=0;i<=CELLS;i++){ctx.beginPath();ctx.moveTo(i*GRID,0);ctx.lineTo(i*GRID,canvas.height);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*GRID);ctx.lineTo(canvas.width,i*GRID);ctx.stroke();}
       // food glow
       ctx.shadowColor='#FFC067';ctx.shadowBlur=12;
