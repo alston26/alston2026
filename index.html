@@ -3,45 +3,205 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alston - Portfolio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Alston Chen — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --border: #222;
+      --text: #e8e4de;
+      --text-muted: #8a8580;
+      --accent: #d4a54a;
+      --accent-glow: rgba(212,165,74,0.15);
+      --heading: 'Playfair Display', Georgia, serif;
+      --body: 'DM Sans', sans-serif;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--body); background: var(--bg); color: var(--text); line-height:1.6; overflow-x:hidden; }
+
+    /* Noise overlay */
+    body::before {
+      content:''; position:fixed; inset:0; z-index:9999; pointer-events:none;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity:0.4;
+    }
+
+    /* NAV */
+    nav {
+      position:fixed; top:0; width:100%; z-index:100;
+      padding:1.5rem 3rem;
+      display:flex; justify-content:space-between; align-items:center;
+      background: rgba(10,10,10,0.85); backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border);
+    }
+    nav .logo {
+      font-family:var(--heading); font-size:1.4rem; font-weight:900;
+      color:var(--accent); text-decoration:none; letter-spacing:0.02em;
+    }
+    nav ul { list-style:none; display:flex; gap:2rem; }
+    nav ul a {
+      color:var(--text-muted); text-decoration:none; font-size:0.85rem;
+      font-weight:500; letter-spacing:0.08em; text-transform:uppercase;
+      transition: color 0.3s;
+    }
+    nav ul a:hover { color:var(--accent); }
+
+    /* HERO */
+    .hero {
+      min-height:100vh; display:flex; align-items:center; justify-content:center;
+      text-align:center; padding:6rem 2rem 4rem;
+      position:relative;
+    }
+    .hero::after {
+      content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+      width:1px; height:80px; background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+    .hero-tag {
+      font-size:0.8rem; text-transform:uppercase; letter-spacing:0.2em;
+      color:var(--accent); margin-bottom:1.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero h1 {
+      font-family:var(--heading); font-size:clamp(3rem,8vw,6.5rem);
+      font-weight:900; line-height:1.05; margin-bottom:1.5rem;
+      animation: fadeUp 0.8s 0.15s ease both;
+    }
+    .hero h1 span { color:var(--accent); }
+    .hero p {
+      font-size:1.15rem; color:var(--text-muted); max-width:500px; margin:0 auto 2.5rem;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+    .hero .cta {
+      display:inline-block; padding:0.9rem 2.4rem;
+      background:var(--accent); color:#0a0a0a; font-weight:700; font-size:0.85rem;
+      text-transform:uppercase; letter-spacing:0.1em; text-decoration:none;
+      border-radius:2px; transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeUp 0.8s 0.45s ease both;
+    }
+    .hero .cta:hover { transform:translateY(-2px); box-shadow:0 8px 30px var(--accent-glow); }
+
+    /* ABOUT */
+    .about {
+      padding:8rem 3rem; max-width:900px; margin:0 auto;
+    }
+    .section-label {
+      font-size:0.75rem; text-transform:uppercase; letter-spacing:0.2em;
+      color:var(--accent); margin-bottom:1rem;
+    }
+    .about h2 {
+      font-family:var(--heading); font-size:2.8rem; font-weight:700; margin-bottom:1.5rem;
+    }
+    .about p { color:var(--text-muted); font-size:1.05rem; margin-bottom:1rem; }
+
+    /* SKILLS STRIP */
+    .skills-strip {
+      padding:4rem 3rem; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    }
+    .skills-strip .inner { max-width:1100px; margin:0 auto; }
+    .skills-strip h3 {
+      font-family:var(--heading); font-size:1.6rem; margin-bottom:2rem; text-align:center;
+    }
+    .skill-tags {
+      display:flex; flex-wrap:wrap; justify-content:center; gap:0.6rem;
+    }
+    .skill-tags span {
+      padding:0.45rem 1rem; border:1px solid var(--border); border-radius:2px;
+      font-size:0.8rem; color:var(--text-muted); letter-spacing:0.04em;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .skill-tags span:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* EDUCATION */
+    .education { padding:6rem 3rem; max-width:900px; margin:0 auto; }
+    .education h2 { font-family:var(--heading); font-size:2.2rem; margin-bottom:2rem; }
+    .edu-item { margin-bottom:2rem; padding-left:1.5rem; border-left:2px solid var(--accent); }
+    .edu-item h4 { font-size:1rem; font-weight:700; }
+    .edu-item .loc { font-size:0.85rem; color:var(--accent); margin-bottom:0.3rem; }
+    .edu-item p { font-size:0.9rem; color:var(--text-muted); }
+
+    /* FOOTER */
+    footer {
+      padding:3rem; text-align:center; border-top:1px solid var(--border);
+      font-size:0.8rem; color:var(--text-muted);
+    }
+    footer a { color:var(--accent); text-decoration:none; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(20px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    @media(max-width:768px) {
+      nav { padding:1rem 1.5rem; }
+      nav ul { gap:1rem; }
+      .about, .education { padding:4rem 1.5rem; }
+      .skills-strip { padding:3rem 1.5rem; }
+    }
   </style>
 </head>
-<body class="bg-gray-900 text-white">
-  
-  <!-- Navigation -->
-  <nav class="bg-gray-800 p-4 fixed w-full top-0 z-50">
-    <div class="container mx-auto flex justify-between items-center">
-      <a href="index.html#home" class="text-2xl font-bold">Alston</a>
-      <ul class="hidden md:flex space-x-6">
-        <li><a href="index.html#about" class="hover:text-gray-400">About</a></li>
-        <li><a href="projects.html" class="hover:text-gray-400">Projects</a></li>
-        <li><a href="contact.html" class="hover:text-gray-400">Contact</a></li>
-      </ul>
-    </div>
+<body>
+  <nav>
+    <a href="index.html" class="logo">AC</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
   </nav>
-  
-  <!-- Hero Section -->
-  <section id="home" class="h-screen flex items-center justify-center text-center">
+
+  <section class="hero">
     <div>
-      <h1 class="text-7xl font-bold">Hi, I'm <span class="text-blue-400">Alston</span></h1>
-      <p class="mt-4 text-lg">It's time to revolutionize the future</p>
-      <a href="projects.html" class="mt-6 inline-block bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600">View My Work</a>
+      <div class="hero-tag">Computer Science · Amherst College '26</div>
+      <h1>Alston <span>Chen</span></h1>
+      <p>Building at the intersection of systems architecture, AI, and human-centered design.</p>
+      <a href="projects.html" class="cta">View My Work</a>
     </div>
   </section>
-  
-  <!-- About Me -->
-  <section id="about" class="h-screen flex items-center justify-center text-center container mx-auto px-4">
-    <div>
-      <h2 class="text-4xl font-bold">About Me</h2>
-      <p class="mt-4 text-lg">I'm a Junior and Amherst College studying
-      <br>Computer Science and Asian Languages and Civilizations
-      </p>
+
+  <section class="about" id="about">
+    <div class="section-label">About</div>
+    <h2>Code. Research. Ship.</h2>
+    <p>I'm a junior at Amherst College double-majoring in Computer Science and Asian Languages &amp; Civilizations. My work spans computer architecture research, enterprise AI integrations at Yale, and hackathon-winning web apps.</p>
+    <p>From debugging CACTI-7 source code in C++ to deploying Salesforce Agentforce AI agents, I thrive on hard problems that sit at the boundary of hardware and software.</p>
+  </section>
+
+  <div class="skills-strip">
+    <div class="inner">
+      <h3>Technical Toolkit</h3>
+      <div class="skill-tags">
+        <span>Python</span><span>Java</span><span>JavaScript</span><span>C++</span><span>C</span>
+        <span>Assembly</span><span>R</span><span>SQL</span><span>Apex</span>
+        <span>PyTorch</span><span>CUDA</span><span>OpenMP</span><span>BindsNet</span>
+        <span>Salesforce</span><span>Agentforce</span><span>Copilot</span><span>Power BI</span>
+        <span>GitHub</span><span>Workday</span><span>SharePoint</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="education">
+    <div class="section-label">Education</div>
+    <h2>Where I've Learned</h2>
+    <div class="edu-item">
+      <h4>Amherst College</h4>
+      <div class="loc">Amherst, MA · Expected May 2026</div>
+      <p>B.A. in Computer Science & Asian Languages and Civilizations. Coursework includes AI, Machine Learning, Algorithms, Compiler Design, Parallel Systems, and Memory Systems.</p>
+    </div>
+    <div class="edu-item">
+      <h4>Doshisha University</h4>
+      <div class="loc">Kyoto, Japan · January 2025</div>
+      <p>Study abroad program.</p>
+    </div>
+    <div class="edu-item">
+      <h4>Engineering Science University Magnet School</h4>
+      <div class="loc">New Haven, CT · June 2022</div>
+      <p>High School Diploma, New Haven Promise Scholar.</p>
     </div>
   </section>
-  
+
+  <footer>
+    <p>Alston Chen · <a href="mailto:achen26@amherst.edu">achen26@amherst.edu</a> · 203-772-9692</p>
+  </footer>
 </body>
 </html>

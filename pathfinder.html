@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A* Pathfinder — Alston Chen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0a0a;--surface:#141414;--border:#222;--text:#e8e4de;--text-muted:#8a8580;--accent:#d4a54a;--heading:'Playfair Display',Georgia,serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+    body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:0.4;}
+    nav{width:100%;padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);}
+    nav .logo{font-family:var(--heading);font-size:1.4rem;font-weight:900;color:var(--accent);text-decoration:none;}
+    nav a.back{color:var(--text-muted);text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.3s;}
+    nav a.back:hover{color:var(--accent);}
+
+    .app{flex:1;display:flex;flex-direction:column;align-items:center;padding:2rem;gap:1.2rem;}
+    h1{font-family:var(--heading);font-size:2rem;}
+    .desc{font-size:0.9rem;color:var(--text-muted);max-width:500px;text-align:center;}
+    .toolbar{display:flex;flex-wrap:wrap;gap:0.6rem;justify-content:center;}
+    .toolbar button,.toolbar select{padding:0.5rem 1.2rem;background:transparent;border:1px solid var(--border);color:var(--text);font-family:var(--body);font-size:0.8rem;cursor:pointer;border-radius:2px;transition:border-color 0.3s,color 0.3s;}
+    .toolbar button:hover{border-color:var(--accent);color:var(--accent);}
+    .toolbar button.active{border-color:var(--accent);color:var(--accent);}
+    .toolbar select{background:var(--surface);}
+    .toolbar select option{background:var(--surface);color:var(--text);}
+    .legend{display:flex;gap:1rem;font-size:0.75rem;color:var(--text-muted);flex-wrap:wrap;justify-content:center;}
+    .legend span{display:flex;align-items:center;gap:4px;}
+    .legend .swatch{width:12px;height:12px;border-radius:2px;}
+
+    #grid{display:grid;gap:1px;background:var(--surface);padding:4px;border-radius:4px;border:1px solid var(--border);cursor:pointer;user-select:none;}
+    #grid .cell{width:18px;height:18px;background:#1a1a1a;border-radius:1px;transition:background 0.1s;}
+    #grid .cell.wall{background:#555;}
+    #grid .cell.start{background:#4aba6a;}
+    #grid .cell.end{background:#e05555;}
+    #grid .cell.open{background:rgba(212,165,74,0.25);}
+    #grid .cell.closed{background:rgba(212,165,74,0.1);}
+    #grid .cell.path{background:#d4a54a;}
+
+    .status{font-family:var(--mono);font-size:0.8rem;color:var(--text-muted);min-height:1.2em;}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo">AC</a>
+    <a href="projects.html" class="back">← Projects</a>
+  </nav>
+
+  <div class="app">
+    <h1>A* Pathfinder</h1>
+    <p class="desc">Click to draw walls, then run the algorithm. Watch A* explore and find the shortest path.</p>
+    <div class="toolbar">
+      <button id="wallBtn" class="active">Draw Walls</button>
+      <button id="startBtn">Set Start</button>
+      <button id="endBtn">Set End</button>
+      <button id="runBtn" style="border-color:var(--accent);color:var(--accent);">Run A*</button>
+      <button id="clearBtn">Clear</button>
+      <button id="mazeBtn">Random Maze</button>
+      <select id="speedSel"><option value="20">Fast</option><option value="50" selected>Medium</option><option value="100">Slow</option></select>
+    </div>
+    <div class="legend">
+      <span><span class="swatch" style="background:#4aba6a"></span>Start</span>
+      <span><span class="swatch" style="background:#e05555"></span>End</span>
+      <span><span class="swatch" style="background:#555"></span>Wall</span>
+      <span><span class="swatch" style="background:rgba(212,165,74,0.25)"></span>Open</span>
+      <span><span class="swatch" style="background:rgba(212,165,74,0.1)"></span>Closed</span>
+      <span><span class="swatch" style="background:#d4a54a"></span>Path</span>
+    </div>
+    <div id="grid"></div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <script>
+    const COLS=30, ROWS=25;
+    let grid, start={x:2,y:12}, end={x:27,y:12}, mode='wall', isDrawing=false, isRunning=false;
+
+    const gridEl=document.getElementById('grid');
+    gridEl.style.gridTemplateColumns=`repeat(${COLS},18px)`;
+
+    function initGrid(){
+      grid=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+      renderGrid();
+    }
+
+    function renderGrid(){
+      gridEl.innerHTML='';
+      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+        const d=document.createElement('div'); d.className='cell';
+        d.dataset.r=r; d.dataset.c=c;
+        if(grid[r][c]===1)d.classList.add('wall');
+        if(r===start.y&&c===start.x)d.classList.add('start');
+        if(r===end.y&&c===end.x)d.classList.add('end');
+        gridEl.appendChild(d);
+      }
+    }
+
+    function getCell(r,c){return gridEl.children[r*COLS+c];}
+
+    gridEl.addEventListener('mousedown',e=>{if(e.target.dataset.r){isDrawing=true;handleCell(e.target);}});
+    gridEl.addEventListener('mouseover',e=>{if(isDrawing&&e.target.dataset.r)handleCell(e.target);});
+    document.addEventListener('mouseup',()=>isDrawing=false);
+    gridEl.addEventListener('touchstart',e=>{e.preventDefault();const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);if(t&&t.dataset.r){isDrawing=true;handleCell(t);}},{passive:false});
+    gridEl.addEventListener('touchmove',e=>{e.preventDefault();const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);if(isDrawing&&t&&t.dataset.r)handleCell(t);},{passive:false});
+    gridEl.addEventListener('touchend',()=>isDrawing=false);
+
+    function handleCell(el){
+      if(isRunning)return;
+      const r=+el.dataset.r, c=+el.dataset.c;
+      if(mode==='wall'){
+        if(r===start.y&&c===start.x||r===end.y&&c===end.x)return;
+        grid[r][c]=grid[r][c]?0:1;
+        el.classList.toggle('wall');
+      } else if(mode==='start'){
+        start={x:c,y:r}; clearViz(); renderGrid();
+      } else if(mode==='end'){
+        end={x:c,y:r}; clearViz(); renderGrid();
+      }
+    }
+
+    function clearViz(){
+      document.querySelectorAll('.open,.closed,.path').forEach(e=>e.classList.remove('open','closed','path'));
+      document.getElementById('status').textContent='';
+    }
+
+    document.getElementById('wallBtn').onclick=()=>setMode('wall');
+    document.getElementById('startBtn').onclick=()=>setMode('start');
+    document.getElementById('endBtn').onclick=()=>setMode('end');
+    function setMode(m){mode=m;document.querySelectorAll('.toolbar button').forEach(b=>b.classList.remove('active'));document.getElementById(m+'Btn').classList.add('active');}
+
+    document.getElementById('clearBtn').onclick=()=>{if(!isRunning){initGrid();}};
+    document.getElementById('mazeBtn').onclick=()=>{
+      if(isRunning)return;
+      initGrid();
+      for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
+        if(r===start.y&&c===start.x||r===end.y&&c===end.x)continue;
+        if(Math.random()<0.3){grid[r][c]=1;}
+      }
+      renderGrid();
+    };
+
+    document.getElementById('runBtn').onclick=runAStar;
+
+    async function runAStar(){
+      if(isRunning)return;
+      isRunning=true; clearViz();
+      const speed=+document.getElementById('speedSel').value;
+      const status=document.getElementById('status');
+
+      const openSet=[], closedSet=new Set();
+      const gScore=Array.from({length:ROWS},()=>Array(COLS).fill(Infinity));
+      const fScore=Array.from({length:ROWS},()=>Array(COLS).fill(Infinity));
+      const cameFrom=Array.from({length:ROWS},()=>Array(COLS).fill(null));
+
+      const h=(r,c)=>Math.abs(r-end.y)+Math.abs(c-end.x);
+      gScore[start.y][start.x]=0;
+      fScore[start.y][start.x]=h(start.y,start.x);
+      openSet.push({r:start.y,c:start.x});
+
+      const dirs=[[0,1],[1,0],[0,-1],[-1,0]];
+      let found=false, steps=0;
+
+      while(openSet.length>0){
+        openSet.sort((a,b)=>fScore[a.r][a.c]-fScore[b.r][b.c]);
+        const cur=openSet.shift();
+        steps++;
+
+        if(cur.r===end.y&&cur.c===end.x){found=true;break;}
+        closedSet.add(cur.r*COLS+cur.c);
+        const ce=getCell(cur.r,cur.c);
+        if(!(cur.r===start.y&&cur.c===start.x))ce.classList.add('closed');
+        ce.classList.remove('open');
+
+        for(const[dr,dc] of dirs){
+          const nr=cur.r+dr, nc=cur.c+dc;
+          if(nr<0||nr>=ROWS||nc<0||nc>=COLS||grid[nr][nc]===1||closedSet.has(nr*COLS+nc))continue;
+          const tg=gScore[cur.r][cur.c]+1;
+          if(tg<gScore[nr][nc]){
+            cameFrom[nr][nc]={r:cur.r,c:cur.c};
+            gScore[nr][nc]=tg;
+            fScore[nr][nc]=tg+h(nr,nc);
+            if(!openSet.some(o=>o.r===nr&&o.c===nc)){
+              openSet.push({r:nr,c:nc});
+              const ne=getCell(nr,nc);
+              if(!(nr===end.y&&nc===end.x))ne.classList.add('open');
+            }
+          }
+        }
+        if(steps%3===0) await new Promise(r=>setTimeout(r,speed));
+        status.textContent=`Exploring... cells checked: ${steps}`;
+      }
+
+      if(found){
+        let cr=end.y, cc=end.x, pathLen=0;
+        while(cameFrom[cr][cc]){
+          const ce=getCell(cr,cc);ce.classList.remove('open','closed');ce.classList.add('path');
+          const p=cameFrom[cr][cc]; cr=p.r; cc=p.c; pathLen++;
+          await new Promise(r=>setTimeout(r,30));
+        }
+        status.textContent=`Path found! Length: ${pathLen}, Cells explored: ${steps}`;
+      } else {
+        status.textContent=`No path found. Cells explored: ${steps}`;
+      }
+      isRunning=false;
+    }
+
+    initGrid();
+  </script>
+</body>
+</html>
