@@ -6,7 +6,7 @@
   <title>A* Pathfinder — Alston Chen</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Outfit:wght@300;400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0d0a14;--surface:#1a1228;--border:rgba(183,165,211,0.08);--text:#e2dfd8;--text-muted:#b7a5d3;--accent:#856cb0;--accent-glow:rgba(133,108,176,0.2);--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;}
+    :root{--bg:#0c0a18;--surface:#161230;--border:rgba(210,195,240,0.1);--text:#e2dfd8;--text-muted:#a99ec4;--accent:#c4b0e0;--accent-glow:rgba(196,176,224,0.18);--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;}
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
     body::after{content:'';position:fixed;inset:0;z-index:99990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:0.5;}
@@ -20,20 +20,20 @@
     .toolbar{display:flex;flex-wrap:wrap;gap:0.6rem;justify-content:center;opacity:0;animation:fu .6s .3s ease forwards;}
     .toolbar button,.toolbar select{padding:0.5rem 1.2rem;background:transparent;border:1px solid var(--border);color:var(--text);font-family:var(--body);font-size:0.78rem;cursor:pointer;border-radius:50px;transition:all 0.3s;}
     .toolbar button:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
-    .toolbar button.active{border-color:var(--accent);color:var(--accent);background:rgba(133,108,176,0.12);}
+    .toolbar button.active{border-color:var(--accent);color:var(--accent);background:rgba(196,176,224,0.1);}
     .toolbar select{background:var(--surface);border-radius:50px;}
     .toolbar select option{background:var(--surface);color:var(--text);}
     .legend{display:flex;gap:1rem;font-size:0.72rem;color:var(--text-muted);flex-wrap:wrap;justify-content:center;opacity:0;animation:fu .6s .35s ease forwards;}
     .legend span{display:flex;align-items:center;gap:4px;}
     .legend .sw{width:12px;height:12px;border-radius:3px;}
     #grid{display:grid;gap:1px;background:var(--surface);padding:4px;border-radius:6px;border:1px solid var(--border);cursor:pointer;user-select:none;opacity:0;animation:fu .6s .4s ease forwards;}
-    #grid .cell{width:18px;height:18px;background:#1a1228;border-radius:2px;transition:background 0.15s;}
-    #grid .cell.wall{background:#7a5ba0;}
+    #grid .cell{width:18px;height:18px;background:#161230;border-radius:2px;transition:background 0.15s;}
+    #grid .cell.wall{background:#9578c0;}
     #grid .cell.start{background:#6dbf6d;}
     #grid .cell.end{background:#e8855e;}
-    #grid .cell.open{background:rgba(133,108,176,0.35);}
-    #grid .cell.closed{background:rgba(133,108,176,0.15);}
-    #grid .cell.path{background:#b7a5d3;box-shadow:0 0 10px rgba(133,108,176,0.4);}
+    #grid .cell.open{background:rgba(196,176,224,0.3);}
+    #grid .cell.closed{background:rgba(210,195,240,0.15);}
+    #grid .cell.path{background:#e8dff5;box-shadow:0 0 12px rgba(196,176,224,0.35);}
     .status{font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);min-height:1.2em;}
     @keyframes fu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
   </style>
@@ -55,10 +55,10 @@
     <div class="legend">
       <span><span class="sw" style="background:#6dbf6d"></span>Start</span>
       <span><span class="sw" style="background:#e8855e"></span>End</span>
-      <span><span class="sw" style="background:#7a5ba0"></span>Wall</span>
-      <span><span class="sw" style="background:rgba(133,108,176,0.35)"></span>Open</span>
-      <span><span class="sw" style="background:rgba(133,108,176,0.15)"></span>Closed</span>
-      <span><span class="sw" style="background:#b7a5d3"></span>Path</span>
+      <span><span class="sw" style="background:#9578c0"></span>Wall</span>
+      <span><span class="sw" style="background:rgba(196,176,224,0.3)"></span>Open</span>
+      <span><span class="sw" style="background:rgba(210,195,240,0.15)"></span>Closed</span>
+      <span><span class="sw" style="background:#ddd2f0"></span>Path</span>
     </div>
     <div id="grid"></div>
     <div class="status" id="status"></div>
