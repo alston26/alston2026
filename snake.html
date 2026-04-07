@@ -6,7 +6,7 @@
   <title>Snake — Alston Chen</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Outfit:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#08090c;--surface:#111318;--border:rgba(255,255,255,0.06);--text:#e2dfd8;--text-muted:#7D99AA;--accent:#FFC067;--accent-glow:rgba(255,192,103,0.15);--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;}
+    :root{--bg:#0d0a14;--surface:#1a1228;--border:rgba(183,165,211,0.08);--text:#e2dfd8;--text-muted:#b7a5d3;--accent:#856cb0;--accent-glow:rgba(133,108,176,0.2);--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;}
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
     body::after{content:'';position:fixed;inset:0;z-index:99990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:0.5;}
@@ -51,21 +51,21 @@
     function init(){snake=[{x:Math.floor(CELLS/2),y:Math.floor(CELLS/2)}];dir={x:1,y:0};nextDir={x:1,y:0};score=0;gameOver=false;document.getElementById('score').textContent=0;placeFood();draw();}
     function placeFood(){do{food={x:Math.floor(Math.random()*CELLS),y:Math.floor(Math.random()*CELLS)};}while(snake.some(s=>s.x===food.x&&s.y===food.y));}
     function draw(){
-      ctx.fillStyle='#111318';ctx.fillRect(0,0,canvas.width,canvas.height);
-      ctx.strokeStyle='rgba(255,255,255,0.08)';
+      ctx.fillStyle='#1a1228';ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.strokeStyle='rgba(183,165,211,0.1)';
       for(let i=0;i<=CELLS;i++){ctx.beginPath();ctx.moveTo(i*GRID,0);ctx.lineTo(i*GRID,canvas.height);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*GRID);ctx.lineTo(canvas.width,i*GRID);ctx.stroke();}
       // food glow
-      ctx.shadowColor='#FFC067';ctx.shadowBlur=12;
-      ctx.fillStyle='#FFC067';ctx.beginPath();ctx.arc(food.x*GRID+GRID/2,food.y*GRID+GRID/2,GRID/2-2,0,Math.PI*2);ctx.fill();
+      ctx.shadowColor='#856cb0';ctx.shadowBlur=12;
+      ctx.fillStyle='#856cb0';ctx.beginPath();ctx.arc(food.x*GRID+GRID/2,food.y*GRID+GRID/2,GRID/2-2,0,Math.PI*2);ctx.fill();
       ctx.shadowBlur=0;
       // snake
       snake.forEach((s,i)=>{
         const t=i/snake.length;
-        ctx.fillStyle=i===0?'#e2dfd8':`rgba(201,148,74,${1-t*0.6})`;
+        ctx.fillStyle=i===0?'#e2dfd8':`rgba(133,108,176,${1-t*0.6})`;
         const r=i===0?4:3;
         ctx.beginPath();ctx.roundRect(s.x*GRID+1,s.y*GRID+1,GRID-2,GRID-2,r);ctx.fill();
       });
-      if(gameOver){ctx.fillStyle='rgba(8,9,12,0.8)';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#FFC067';ctx.font='bold 32px Cormorant Garamond';ctx.textAlign='center';ctx.fillText('Game Over',canvas.width/2,canvas.height/2-10);ctx.fillStyle='#7a7670';ctx.font='15px Outfit';ctx.fillText('Press Start to play again',canvas.width/2,canvas.height/2+22);}
+      if(gameOver){ctx.fillStyle='rgba(13,10,20,0.8)';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#856cb0';ctx.font='bold 32px Cormorant Garamond';ctx.textAlign='center';ctx.fillText('Game Over',canvas.width/2,canvas.height/2-10);ctx.fillStyle='#b7a5d3';ctx.font='15px Outfit';ctx.fillText('Press Start to play again',canvas.width/2,canvas.height/2+22);}
     }
     function tick(){
       dir=nextDir;const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};

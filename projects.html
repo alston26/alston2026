@@ -6,13 +6,13 @@
   <title>Alston Chen — Projects</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#08090c;--surface:#111318;--surface2:#181b22;--border:rgba(255,255,255,0.06);--text:#e2dfd8;--text-muted:#7D99AA;--accent:#FFC067;--accent2:#66F4FF;--accent-glow:rgba(255,192,103,0.15);--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;}
+    :root{--bg:#0d0a14;--surface:#1a1228;--surface2:#241838;--border:rgba(183,165,211,0.08);--text:#e2dfd8;--text-muted:#b7a5d3;--accent:#856cb0;--accent2:#b7a5d3;--accent-glow:rgba(133,108,176,0.2);--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;}
     *{margin:0;padding:0;box-sizing:border-box;}
     html{scroll-behavior:smooth;}
     body{font-family:var(--body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
     body::after{content:'';position:fixed;inset:0;z-index:99990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:0.5;}
 
-    nav{position:fixed;top:0;width:100%;z-index:1000;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(8,9,12,0.7);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border);transition:padding 0.4s;}
+    nav{position:fixed;top:0;width:100%;z-index:1000;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(13,10,20,0.7);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border);transition:padding 0.4s;}
     nav.scrolled{padding:0.8rem 3rem;}
     .logo{font-family:var(--heading);font-size:1.8rem;font-weight:700;color:var(--accent);text-decoration:none;}
     nav ul{list-style:none;display:flex;gap:2.5rem;}
@@ -31,7 +31,7 @@
     .projects-grid{max-width:1100px;margin:0 auto;padding:3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;}
     .card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:2rem;transition:border-color 0.4s,transform 0.4s cubic-bezier(0.25,0.8,0.25,1),box-shadow 0.4s;position:relative;overflow:hidden;}
     .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.5s cubic-bezier(0.25,0.8,0.25,1);}
-    .card:hover{border-color:rgba(255,192,103,0.35);transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,0.4);}
+    .card:hover{border-color:rgba(133,108,176,0.35);transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,0.4);}
     .card:hover::before{transform:scaleX(1);}
     .card .tag{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:0.8rem;}
     .card h3{font-family:var(--heading);font-size:1.5rem;margin-bottom:0.6rem;}
