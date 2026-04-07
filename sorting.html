@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting Visualizer — Alston Chen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Outfit:wght@300;400;500;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#08090c;--surface:#111318;--border:rgba(255,255,255,0.06);--text:#e2dfd8;--text-muted:#7D99AA;--accent:#FFC067;--accent2:#66F4FF;--accent-glow:rgba(255,192,103,0.15);--green:#66F4FF;--red:#66C4FF;--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+    body::after{content:'';position:fixed;inset:0;z-index:99990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:0.5;}
+    nav{width:100%;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);}
+    .logo{font-family:var(--heading);font-size:1.8rem;font-weight:700;color:var(--accent);text-decoration:none;}
+    nav a.back{color:var(--text-muted);text-decoration:none;font-size:0.8rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.3s;}
+    nav a.back:hover{color:var(--accent);}
+    .app{flex:1;display:flex;flex-direction:column;align-items:center;padding:2rem;gap:1.2rem;}
+    h1{font-family:var(--heading);font-size:2.5rem;opacity:0;animation:fu .6s .1s ease forwards;}
+    .desc{font-size:0.88rem;color:var(--text-muted);max-width:520px;text-align:center;font-weight:300;opacity:0;animation:fu .6s .2s ease forwards;}
+    .toolbar{display:flex;flex-wrap:wrap;gap:0.6rem;justify-content:center;opacity:0;animation:fu .6s .3s ease forwards;}
+    .toolbar button,.toolbar select{padding:0.5rem 1.2rem;background:transparent;border:1px solid var(--border);color:var(--text);font-family:var(--body);font-size:0.78rem;cursor:pointer;border-radius:50px;transition:all 0.3s;}
+    .toolbar button:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+    .toolbar button.active{border-color:var(--accent);color:var(--accent);background:rgba(255,192,103,0.1);}
+    .toolbar select{background:var(--surface);border-radius:50px;}
+    .toolbar select option{background:var(--surface);color:var(--text);}
+    .viz{width:100%;max-width:800px;height:350px;display:flex;align-items:flex-end;gap:1px;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;opacity:0;animation:fu .6s .35s ease forwards;}
+    .bar{flex:1;background:var(--accent);border-radius:2px 2px 0 0;transition:height 0.05s;min-width:2px;}
+    .bar.comparing{background:var(--red);}
+    .bar.sorted{background:var(--green);}
+    .bar.active{background:var(--accent2);}
+    .status{font-family:var(--mono);font-size:0.78rem;color:var(--text-muted);min-height:1.2em;}
+    @keyframes fu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    @media(max-width:600px){.viz{height:250px;}}
+  </style>
+</head>
+<body>
+  <nav><a href="index.html" class="logo">AC</a><a href="projects.html" class="back">← Projects</a></nav>
+  <div class="app">
+    <h1>Sorting Visualizer</h1>
+    <p class="desc">Watch sorting algorithms in action. Compare how Bubble Sort, Merge Sort, and Quick Sort rearrange data step by step.</p>
+    <div class="toolbar">
+      <button id="bubbleBtn" class="active">Bubble Sort</button>
+      <button id="mergeBtn">Merge Sort</button>
+      <button id="quickBtn">Quick Sort</button>
+      <button id="runBtn" style="border-color:var(--accent);color:var(--accent)">Sort</button>
+      <button id="shuffleBtn">Shuffle</button>
+      <select id="sizeSelect">
+        <option value="30">30 bars</option>
+        <option value="60" selected>60 bars</option>
+        <option value="100">100 bars</option>
+      </select>
+      <select id="speedSelect">
+        <option value="5">Fast</option>
+        <option value="20" selected>Medium</option>
+        <option value="50">Slow</option>
+      </select>
+    </div>
+    <div class="viz" id="viz"></div>
+    <div class="status" id="status"></div>
+  </div>
+  <script>
+    let arr=[],barEls=[],running=false,algo='bubble',speed=20,comparisons=0,swaps=0;
+    const viz=document.getElementById('viz'),status=document.getElementById('status');
+
+    function genArray(){
+      const n=+document.getElementById('sizeSelect').value;
+      arr=Array.from({length:n},(_,i)=>((i+1)/n)*100);
+      shuffle();
+    }
+    function shuffle(){
+      for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+      renderBars();comparisons=0;swaps=0;status.textContent='';
+    }
+    function renderBars(){
+      viz.innerHTML='';barEls=[];
+      arr.forEach(v=>{const b=document.createElement('div');b.className='bar';b.style.height=v+'%';viz.appendChild(b);barEls.push(b);});
+    }
+    function updateBar(i){barEls[i].style.height=arr[i]+'%';}
+    function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+    // ALGORITHMS
+    async function bubbleSort(){
+      for(let i=0;i<arr.length;i++){
+        for(let j=0;j<arr.length-i-1;j++){
+          barEls[j].classList.add('comparing');barEls[j+1].classList.add('comparing');
+          comparisons++;
+          await sleep(speed);
+          if(arr[j]>arr[j+1]){[arr[j],arr[j+1]]=[arr[j+1],arr[j]];updateBar(j);updateBar(j+1);swaps++;}
+          barEls[j].classList.remove('comparing');barEls[j+1].classList.remove('comparing');
+          status.textContent=`Comparisons: ${comparisons} · Swaps: ${swaps}`;
+        }
+        barEls[arr.length-i-1].classList.add('sorted');
+      }
+    }
+
+    async function mergeSort(lo=0,hi=arr.length-1){
+      if(lo>=hi)return;
+      const mid=Math.floor((lo+hi)/2);
+      await mergeSort(lo,mid);await mergeSort(mid+1,hi);
+      await merge(lo,mid,hi);
+    }
+    async function merge(lo,mid,hi){
+      const temp=[];let i=lo,j=mid+1;
+      while(i<=mid&&j<=hi){
+        comparisons++;
+        barEls[i].classList.add('comparing');barEls[j].classList.add('comparing');
+        await sleep(speed);
+        barEls[i].classList.remove('comparing');barEls[j].classList.remove('comparing');
+        if(arr[i]<=arr[j])temp.push(arr[i++]);else{temp.push(arr[j++]);swaps++;}
+        status.textContent=`Comparisons: ${comparisons} · Swaps: ${swaps}`;
+      }
+      while(i<=mid)temp.push(arr[i++]);
+      while(j<=hi)temp.push(arr[j++]);
+      for(let k=0;k<temp.length;k++){arr[lo+k]=temp[k];updateBar(lo+k);barEls[lo+k].classList.add('active');await sleep(speed/2);barEls[lo+k].classList.remove('active');}
+    }
+
+    async function quickSort(lo=0,hi=arr.length-1){
+      if(lo>=hi){if(lo>=0&&lo<arr.length)barEls[lo].classList.add('sorted');return;}
+      const p=await partition(lo,hi);
+      barEls[p].classList.add('sorted');
+      await quickSort(lo,p-1);await quickSort(p+1,hi);
+    }
+    async function partition(lo,hi){
+      const pivot=arr[hi];let i=lo-1;
+      barEls[hi].classList.add('active');
+      for(let j=lo;j<hi;j++){
+        comparisons++;barEls[j].classList.add('comparing');await sleep(speed);
+        if(arr[j]<pivot){i++;[arr[i],arr[j]]=[arr[j],arr[i]];updateBar(i);updateBar(j);swaps++;}
+        barEls[j].classList.remove('comparing');
+        status.textContent=`Comparisons: ${comparisons} · Swaps: ${swaps}`;
+      }
+      [arr[i+1],arr[hi]]=[arr[hi],arr[i+1]];updateBar(i+1);updateBar(hi);swaps++;
+      barEls[hi].classList.remove('active');
+      return i+1;
+    }
+
+    async function markAllSorted(){for(let i=0;i<barEls.length;i++){barEls[i].classList.add('sorted');await sleep(8);}}
+
+    // CONTROLS
+    function setAlgo(a){algo=a;document.querySelectorAll('.toolbar button').forEach(b=>b.classList.remove('active'));document.getElementById(a+'Btn').classList.add('active');}
+    document.getElementById('bubbleBtn').onclick=()=>setAlgo('bubble');
+    document.getElementById('mergeBtn').onclick=()=>setAlgo('merge');
+    document.getElementById('quickBtn').onclick=()=>setAlgo('quick');
+    document.getElementById('shuffleBtn').onclick=()=>{if(!running){shuffle();}};
+    document.getElementById('sizeSelect').onchange=()=>{if(!running)genArray();};
+    document.getElementById('speedSelect').onchange=e=>{speed=+e.target.value;};
+
+    document.getElementById('runBtn').onclick=async()=>{
+      if(running)return;running=true;comparisons=0;swaps=0;
+      // reset classes
+      barEls.forEach(b=>{b.classList.remove('sorted','comparing','active');});
+      if(algo==='bubble')await bubbleSort();
+      else if(algo==='merge'){await mergeSort();await markAllSorted();}
+      else if(algo==='quick'){await quickSort();await markAllSorted();}
+      status.textContent=`Done! Comparisons: ${comparisons} · Swaps: ${swaps}`;
+      running=false;
+    };
+
+    genArray();
+  </script>
+</body>
+</html>

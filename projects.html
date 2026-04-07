@@ -4,58 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alston Chen — Projects</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg:#0a0a0a;--surface:#141414;--border:#222;--text:#e8e4de;--text-muted:#8a8580;
-      --accent:#d4a54a;--accent-glow:rgba(212,165,74,0.15);
-      --heading:'Playfair Display',Georgia,serif;--body:'DM Sans',sans-serif;
-    }
+    :root{--bg:#08090c;--surface:#111318;--surface2:#181b22;--border:rgba(255,255,255,0.06);--text:#e2dfd8;--text-muted:#7D99AA;--accent:#FFC067;--accent2:#66F4FF;--accent-glow:rgba(255,192,103,0.15);--heading:'Cormorant Garamond',Georgia,serif;--body:'Outfit',sans-serif;}
     *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
     body{font-family:var(--body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;}
-    body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:0.4;}
-    nav{position:fixed;top:0;width:100%;z-index:100;padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,10,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
-    nav .logo{font-family:var(--heading);font-size:1.4rem;font-weight:900;color:var(--accent);text-decoration:none;}
-    nav ul{list-style:none;display:flex;gap:2rem;}
-    nav ul a{color:var(--text-muted);text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.3s;}
-    nav ul a:hover{color:var(--accent);}
+    body::after{content:'';position:fixed;inset:0;z-index:99990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");opacity:0.5;}
 
-    .page-header{padding:8rem 3rem 3rem;text-align:center;}
-    .page-header .section-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--accent);margin-bottom:1rem;}
-    .page-header h1{font-family:var(--heading);font-size:3rem;font-weight:900;}
+    nav{position:fixed;top:0;width:100%;z-index:1000;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(8,9,12,0.7);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border);transition:padding 0.4s;}
+    nav.scrolled{padding:0.8rem 3rem;}
+    .logo{font-family:var(--heading);font-size:1.8rem;font-weight:700;color:var(--accent);text-decoration:none;}
+    nav ul{list-style:none;display:flex;gap:2.5rem;}
+    nav ul a{color:var(--text-muted);text-decoration:none;font-size:0.8rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;position:relative;transition:color 0.3s;}
+    nav ul a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--accent);transition:width 0.4s cubic-bezier(0.25,0.8,0.25,1);}
+    nav ul a:hover{color:var(--accent);}
+    nav ul a:hover::after{width:100%;}
+
+    .reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s cubic-bezier(0.16,1,0.3,1),transform 0.8s cubic-bezier(0.16,1,0.3,1);}
+    .reveal.vis{opacity:1;transform:translateY(0);}
+
+    .page-header{padding:9rem 3rem 3rem;text-align:center;}
+    .section-label{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.25em;color:var(--accent);margin-bottom:1rem;}
+    .page-header h1{font-family:var(--heading);font-size:3.5rem;font-weight:700;}
 
     .projects-grid{max-width:1100px;margin:0 auto;padding:3rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;}
-    .card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2rem;transition:border-color 0.3s,transform 0.3s;}
-    .card:hover{border-color:var(--accent);transform:translateY(-4px);}
-    .card .tag{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:0.8rem;}
-    .card h3{font-family:var(--heading);font-size:1.4rem;margin-bottom:0.6rem;}
-    .card p{font-size:0.9rem;color:var(--text-muted);margin-bottom:1.2rem;}
-    .card a{color:var(--accent);text-decoration:none;font-size:0.85rem;font-weight:600;letter-spacing:0.05em;transition:opacity 0.3s;}
-    .card a:hover{opacity:0.7;}
-    .card .links{display:flex;gap:1rem;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:2rem;transition:border-color 0.4s,transform 0.4s cubic-bezier(0.25,0.8,0.25,1),box-shadow 0.4s;position:relative;overflow:hidden;}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform 0.5s cubic-bezier(0.25,0.8,0.25,1);}
+    .card:hover{border-color:rgba(255,192,103,0.35);transform:translateY(-6px);box-shadow:0 16px 48px rgba(0,0,0,0.4);}
+    .card:hover::before{transform:scaleX(1);}
+    .card .tag{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--accent);margin-bottom:0.8rem;}
+    .card h3{font-family:var(--heading);font-size:1.5rem;margin-bottom:0.6rem;}
+    .card p{font-size:0.88rem;color:var(--text-muted);font-weight:300;margin-bottom:1.2rem;line-height:1.5;}
+    .card-links{display:flex;gap:1rem;}
+    .card-links a{color:var(--accent);text-decoration:none;font-size:0.82rem;font-weight:600;letter-spacing:0.05em;transition:opacity 0.3s;display:inline-flex;align-items:center;gap:0.3rem;}
+    .card-links a:hover{opacity:0.7;}
 
     .section-divider{max-width:1100px;margin:2rem auto;padding:0 3rem;}
     .section-divider hr{border:none;border-top:1px solid var(--border);}
 
-    .coursework{max-width:1100px;margin:0 auto;padding:2rem 3rem 6rem;}
-    .coursework h2{font-family:var(--heading);font-size:2rem;margin-bottom:2rem;text-align:center;}
+    .coursework{max-width:1100px;margin:0 auto;padding:2rem 3rem 6rem;text-align:center;}
+    .coursework h2{font-family:var(--heading);font-size:2.2rem;margin-bottom:2rem;}
     .course-list{display:flex;flex-wrap:wrap;justify-content:center;gap:0.6rem;}
-    .course-list span{padding:0.5rem 1.2rem;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);border-radius:2px;transition:border-color 0.3s,color 0.3s;}
-    .course-list span:hover{border-color:var(--accent);color:var(--accent);}
+    .course-list span{padding:0.5rem 1.2rem;border:1px solid var(--border);font-size:0.85rem;color:var(--text-muted);border-radius:50px;transition:border-color 0.3s,color 0.3s,transform 0.3s;}
+    .course-list span:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
 
     footer{padding:3rem;text-align:center;border-top:1px solid var(--border);font-size:0.8rem;color:var(--text-muted);}
     footer a{color:var(--accent);text-decoration:none;}
-    @media(max-width:768px){nav{padding:1rem 1.5rem;}nav ul{gap:1rem;}.projects-grid,.coursework{padding:2rem 1.5rem;}.page-header{padding:6rem 1.5rem 2rem;}}
+
+    .hamburger{display:none;background:none;border:none;cursor:pointer;padding:0.5rem;}
+    .hamburger span{display:block;width:22px;height:2px;background:var(--text);margin:5px 0;}
+    @media(max-width:768px){nav{padding:1rem 1.5rem;}nav ul{display:none;}.hamburger{display:block;}.projects-grid,.coursework{padding:2rem 1.5rem;}.page-header{padding:6rem 1.5rem 2rem;}}
   </style>
 </head>
 <body>
-  <nav>
-    <a href="index.html" class="logo">AC</a>
+  <nav id="nav">
+    <a href="index.html" class="logo">Alston Chen</a>
     <ul>
       <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#experience">Experience</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
       <li><a href="projects.html">Projects</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
+    <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
 
   <div class="page-header">
@@ -64,70 +76,71 @@
   </div>
 
   <div class="projects-grid">
-    <div class="card">
+    <div class="card reveal">
       <div class="tag">Interactive · JavaScript</div>
       <h3>Snake Game</h3>
-      <p>Classic snake game with smooth controls, score tracking, and increasing difficulty — built from scratch in vanilla JS.</p>
-      <div class="links">
-        <a href="snake.html">Play →</a>
-      </div>
+      <p>Classic snake with smooth controls, score tracking, and increasing difficulty — built from scratch in vanilla JS with canvas rendering.</p>
+      <div class="card-links"><a href="snake.html">Play →</a></div>
     </div>
-    <div class="card">
+    <div class="card reveal" style="transition-delay:0.08s">
       <div class="tag">AI · Algorithms</div>
       <h3>A* Pathfinder</h3>
-      <p>Interactive visualization of the A* search algorithm. Draw walls, set start/end points, and watch the algorithm find the shortest path.</p>
-      <div class="links">
-        <a href="pathfinder.html">Try It →</a>
-      </div>
+      <p>Interactive visualization of the A* search algorithm. Draw walls, generate mazes, and watch the algorithm explore in real time.</p>
+      <div class="card-links"><a href="pathfinder.html">Try It →</a></div>
     </div>
-    <div class="card">
+    <div class="card reveal" style="transition-delay:0.16s">
+      <div class="tag">Full-Stack · AI Agents</div>
+      <h3>AI Website Builder</h3>
+      <p>Natural language website generator using Claude for orchestration, DALL·E 3 for backgrounds, and GPT-4o Vision for style-guide extraction from any URL.</p>
+    </div>
+    <div class="card reveal" style="transition-delay:0.24s">
+      <div class="tag">Interactive · Algorithms</div>
+      <h3>Sorting Visualizer</h3>
+      <p>Real-time visualization of sorting algorithms including Bubble Sort, Merge Sort, and Quick Sort. Compare speed and behavior side-by-side.</p>
+      <div class="card-links"><a href="sorting.html">Try It →</a></div>
+    </div>
+    <div class="card reveal" style="transition-delay:0.32s">
       <div class="tag">Hackathon · 1st Place</div>
       <h3>Hack the Herd — Lost &amp; Found</h3>
-      <p>Grand Prize winner at Hack the Herd. AI-powered image recognition and interactive maps for campus lost &amp; found.</p>
+      <p>Grand Prize winner. AI-powered image recognition and interactive maps for a campus-wide lost &amp; found system focused on sustainability.</p>
     </div>
-    <div class="card">
+    <div class="card reveal" style="transition-delay:0.4s">
       <div class="tag">Research · C++</div>
       <h3>Computing at the Source</h3>
       <p>Research into Processing-in-Memory simulators. Fixed severe inconsistencies in CACTI-7 and built front-end visualizations.</p>
-      <div class="links">
-        <a href="https://github.com/alston26/Computing-At-The-Source-Alston" target="_blank">GitHub →</a>
-      </div>
+      <div class="card-links"><a href="https://github.com/alston26/Computing-At-The-Source-Alston" target="_blank">GitHub →</a></div>
     </div>
-    <div class="card">
+    <div class="card reveal" style="transition-delay:0.48s">
       <div class="tag">Full-Stack · Sustainability</div>
       <h3>Starving Mammoths</h3>
-      <p>An app designed to reduce food waste through data collection of event foods on campus.</p>
-      <div class="links">
-        <a href="https://github.com/alston26/Food-Waste" target="_blank">GitHub →</a>
-      </div>
+      <p>App to reduce food waste through data collection of event foods on campus.</p>
+      <div class="card-links"><a href="https://github.com/alston26/Food-Waste" target="_blank">GitHub →</a></div>
     </div>
-    <div class="card">
+    <div class="card reveal" style="transition-delay:0.56s">
       <div class="tag">Enterprise · Salesforce</div>
       <h3>Yale HRISS Portal</h3>
-      <p>Built Salesforce Experience Cloud HR portal and Agentforce AI agents with SSO, knowledge retrieval, and service catalog logic.</p>
+      <p>Salesforce Experience Cloud HR portal with Agentforce AI agents, SSO, knowledge retrieval, and service catalog logic.</p>
     </div>
   </div>
 
   <div class="section-divider"><hr></div>
 
   <div class="coursework">
-    <h2>Coursework</h2>
-    <div class="course-list">
-      <span>Artificial Intelligence</span>
-      <span>Machine Learning</span>
-      <span>Algorithms</span>
-      <span>Compiler Design</span>
-      <span>Parallel Systems</span>
-      <span>Memory Systems</span>
-      <span>Computer Systems</span>
-      <span>Data Structures</span>
-      <span>Linear Algebra</span>
-      <span>Multivariate Calculus</span>
+    <div class="section-label reveal">Coursework</div>
+    <h2 class="reveal" style="transition-delay:0.1s">What I've Studied</h2>
+    <div class="course-list reveal" style="transition-delay:0.2s">
+      <span>Artificial Intelligence</span><span>Machine Learning</span><span>Algorithms</span>
+      <span>Compiler Design</span><span>Parallel Systems</span><span>Memory Systems</span>
+      <span>Computer Systems</span><span>Data Structures</span><span>Linear Algebra</span><span>Multivariate Calculus</span>
     </div>
   </div>
 
-  <footer>
-    <p>Alston Chen · <a href="mailto:achen26@amherst.edu">achen26@amherst.edu</a></p>
-  </footer>
+  <footer><p>Alston Chen · <a href="mailto:achen26@amherst.edu">achen26@amherst.edu</a></p></footer>
+
+  <script>
+    const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+    window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>80);});
+  </script>
 </body>
 </html>
